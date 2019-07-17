@@ -12,6 +12,14 @@
 const title = process.env.TITLE || 'BlahBot Test'
 console.log('title:', title)
 
+function delay() {
+  return new Promise(function(resolve, reject) {
+    setTimeout(function () {
+      resolve()
+    }, 20 * 1000)
+  })
+}
+
 /**
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Application} app
@@ -28,7 +36,7 @@ module.exports = app => {
     // Do stuff
     const { head_branch: headBranch, head_sha: headSha } = context.payload.check_suite
 
-    // create the check
+    // create the check output
     const check = {
       name: title,
       head_branch: headBranch,
@@ -43,6 +51,9 @@ module.exports = app => {
       }
     }
     console.log('check:', check)
+
+    // wait 20 seconds before replying
+    await delay()
 
     return context.github.checks.create(context.repo(check))
   }
